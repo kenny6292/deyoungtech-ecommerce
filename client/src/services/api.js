@@ -1,14 +1,19 @@
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
+const API_URL = (import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:5000/api' : '/api')).replace(/\/$/, '')
 
 async function request(path, options = {}) {
   const token = localStorage.getItem('deyoungtech-token')
-  const response = await fetch(`${API_URL}${path}`, {
-    ...options,
-    headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}), ...(options.headers || {}) },
-  })
-  const data = await response.json().catch(() => ({}))
-  if (!response.ok) throw new Error(data.message || 'Request failed')
-  return data
+  try {
+    const response = await fetch(`${API_URL}${path}`, {
+      ...options,
+      headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}), ...(options.headers || {}) },
+    })
+    const data = await response.json().catch(() => ({}))
+    if (!response.ok) throw new Error(data.message || `Request failed (${response.status})`)
+    return data
+  } catch (error) {
+    if (error instanceof TypeError) throw new Error('Unable to reach the DEYOUNGTECH store API. Check the deployment and database configuration.')
+    throw error
+  }
 }
 
 export const api = {
@@ -25,8 +30,8 @@ export const api = {
   reviews: productId => request(`/reviews/${encodeURIComponent(productId)}`),
   addReview: (productId, payload) => request(`/reviews/${encodeURIComponent(productId)}`, { method: 'POST', body: JSON.stringify(payload) }),
   validateCoupon: (code, subtotal) => request('/coupons/validate', { method: 'POST', body: JSON.stringify({ code, subtotal }) }),
-  initializePaystack: reference => request('/payments/paystack/initialize', { method: 'POST', body: JSON.stringify({ reference }) }),
-  initializeFlutterwave: reference => request('/payments/flutterwave/initialize', { method: 'POST', body: JSON.stringify({ reference }) }),
+  initializePaystack: reference => request('/payments/paystack/initialize', { method: 'POST', body: JSON.stringify({ reference })),
+  initializeFlutterwave: reference => request('/payments/flutterwave/initialize', { method: 'POST', body: JSON.stringify({ reference })),
   verifyPaystack: reference => request(`/payments/paystack/verify/${encodeURIComponent(reference)}`),
   verifyFlutterwave: transactionId => request(`/payments/flutterwave/verify/${encodeURIComponent(transactionId)}`),
   adminStats: () => request('/admin/stats'),
