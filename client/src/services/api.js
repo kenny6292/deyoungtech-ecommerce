@@ -13,13 +13,24 @@ async function request(path, options = {}) {
 
 export const api = {
   products: (params = '') => request(`/products${params ? `?${params}` : ''}`),
+  search: (params = '') => request(`/search${params ? `?${params}` : ''}`),
   createOrder: payload => request('/orders', { method: 'POST', body: JSON.stringify(payload) }),
+  getOrder: reference => request(`/orders/${encodeURIComponent(reference)}`),
   register: payload => request('/auth/register', { method: 'POST', body: JSON.stringify(payload) }),
   login: payload => request('/auth/login', { method: 'POST', body: JSON.stringify(payload) }),
+  profile: () => request('/customer/profile'),
+  customerOrders: () => request('/customer/orders'),
+  wishlist: () => request('/wishlist'),
+  toggleWishlist: productId => request(`/wishlist/${encodeURIComponent(productId)}`, { method: 'POST' }),
+  reviews: productId => request(`/reviews/${encodeURIComponent(productId)}`),
+  addReview: (productId, payload) => request(`/reviews/${encodeURIComponent(productId)}`, { method: 'POST', body: JSON.stringify(payload) }),
+  validateCoupon: (code, subtotal) => request('/coupons/validate', { method: 'POST', body: JSON.stringify({ code, subtotal }) }),
   initializePaystack: reference => request('/payments/paystack/initialize', { method: 'POST', body: JSON.stringify({ reference }) }),
   initializeFlutterwave: reference => request('/payments/flutterwave/initialize', { method: 'POST', body: JSON.stringify({ reference }) }),
   verifyPaystack: reference => request(`/payments/paystack/verify/${encodeURIComponent(reference)}`),
   verifyFlutterwave: transactionId => request(`/payments/flutterwave/verify/${encodeURIComponent(transactionId)}`),
+  adminStats: () => request('/admin/stats'),
+  adminAnalytics: () => request('/analytics/overview'),
 }
 
 export default api
