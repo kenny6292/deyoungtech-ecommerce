@@ -2,6 +2,7 @@ import 'dotenv/config'
 import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
+import Product from './models/Product.js'
 
 const app = express()
 const PORT = process.env.PORT || 5000
@@ -15,7 +16,6 @@ app.get('/api/health', (_req, res) => {
 
 app.get('/api/products', async (_req, res) => {
   try {
-    const Product = mongoose.model('Product')
     const products = await Product.find({ isActive: true }).sort({ createdAt: -1 })
     res.json({ success: true, products })
   } catch (error) {
