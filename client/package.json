@@ -1,7 +1,6 @@
 {
   "name": "deyoungtech-ecommerce-client",
   "private": true,
-  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -13,7 +12,13 @@
     "vite": "latest",
     "react": "latest",
     "react-dom": "latest",
-    "lucide-react": "latest"
+    "lucide-react": "latest",
+    "express": "latest",
+    "cors": "latest",
+    "mongoose": "latest",
+    "bcryptjs": "latest",
+    "jsonwebtoken": "latest",
+    "dotenv": "latest"
   },
   "devDependencies": {}
 }
