@@ -20,5 +20,5 @@ jobs:
         run: npm run build --prefix client
       - name: Install server dependencies
         run: npm install --prefix server
-      - name: Check all server JavaScript
-        run: find server -name '*.js' -print0 | xargs -0 -n1 node --check
+      - name: Check all JavaScript
+        run: find server client/api -name '*.js' -print0 | xargs -0 -n1 node --check
