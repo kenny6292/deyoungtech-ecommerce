@@ -22,7 +22,7 @@ function App() {
   const [cart, setCart] = useState(() => JSON.parse(localStorage.getItem('deyoungtech-cart') || '[]'))
   const [wishlist, setWishlist] = useState(() => JSON.parse(localStorage.getItem('deyoungtech-wishlist') || '[]'))
   const [recent, setRecent] = useState(() => JSON.parse(localStorage.getItem('deyoungtech-recent') || '[]'))
-  const [products, setProducts] = useState([])
+  const [products, setProducts] = useState(fallbackProducts)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [category, setCategory] = useState('All')
@@ -41,7 +41,17 @@ function App() {
   useEffect(() => { localStorage.setItem('deyoungtech-wishlist', JSON.stringify(wishlist)) }, [wishlist])
   useEffect(() => { localStorage.setItem('deyoungtech-recent', JSON.stringify(recent)) }, [recent])
   useEffect(() => {
-    api.products().then(data => setProducts(data.products || [])).catch(e => setError(e.message || 'Unable to load products.')).finally(() => setLoading(false))
+    api.products()
+      .then(data => {
+        const remoteProducts = Array.isArray(data?.products) ? data.products : []
+        setProducts(remoteProducts.length ? remoteProducts : fallbackProducts)
+        if (!remoteProducts.length) setError('Showing the store catalog while the product database is being connected.')
+      })
+      .catch(() => {
+        setProducts(fallbackProducts)
+        setError('Showing the store catalog while the product service is unavailable.')
+      })
+      .finally(() => setLoading(false))
   }, [])
   useEffect(() => { if (!toast) return; const timer = setTimeout(() => setToast(''), 2500); return () => clearTimeout(timer) }, [toast])
   useEffect(() => {
