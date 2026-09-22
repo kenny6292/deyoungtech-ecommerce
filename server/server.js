@@ -8,7 +8,7 @@ async function startServer() {
   else if (process.env.NODE_ENV === 'production') throw new Error('MONGODB_URI is required in production.')
   else console.warn('MONGODB_URI is not configured. Database routes will not work.')
 
-  app.listen(PORT, () => console.log(`DEYOUNGTECH API running on port ${PORT}`))
+  app.listen(PORT, () => console.log(`NEXORA API running on port ${PORT}`))
 }
 
 startServer().catch(error => {
