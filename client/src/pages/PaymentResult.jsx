@@ -19,7 +19,7 @@ export default function PaymentResult({ provider, onDone }) {
     verify.then(data => {
       if (!active) return
       if (data.success && data.order?.paymentStatus === 'paid') {
-        localStorage.removeItem('deyoungtech-cart')
+        localStorage.removeItem('nexora-cart')
         setStatus('success')
         setMessage(`Payment confirmed for order ${data.order.reference}.`)
         onDone?.()
