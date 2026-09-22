@@ -19,9 +19,9 @@ const FREE_SHIPPING = 100000
 
 function App() {
   const [query, setQuery] = useState(new URLSearchParams(window.location.search).get('q') || '')
-  const [cart, setCart] = useState(() => JSON.parse(localStorage.getItem('deyoungtech-cart') || '[]'))
-  const [wishlist, setWishlist] = useState(() => JSON.parse(localStorage.getItem('deyoungtech-wishlist') || '[]'))
-  const [recent, setRecent] = useState(() => JSON.parse(localStorage.getItem('deyoungtech-recent') || '[]'))
+  const [cart, setCart] = useState(() => JSON.parse(localStorage.getItem('nexora-cart') || '[]'))
+  const [wishlist, setWishlist] = useState(() => JSON.parse(localStorage.getItem('nexora-wishlist') || '[]'))
+  const [recent, setRecent] = useState(() => JSON.parse(localStorage.getItem('nexora-recent') || '[]'))
   const [products, setProducts] = useState(fallbackProducts)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -35,11 +35,11 @@ function App() {
   const [toast, setToast] = useState('')
   const [visible, setVisible] = useState(8)
   const path = window.location.pathname
-  const user = JSON.parse(localStorage.getItem('deyoungtech-user') || 'null')
+  const user = JSON.parse(localStorage.getItem('nexora-user') || 'null')
 
-  useEffect(() => { localStorage.setItem('deyoungtech-cart', JSON.stringify(cart)) }, [cart])
-  useEffect(() => { localStorage.setItem('deyoungtech-wishlist', JSON.stringify(wishlist)) }, [wishlist])
-  useEffect(() => { localStorage.setItem('deyoungtech-recent', JSON.stringify(recent)) }, [recent])
+  useEffect(() => { localStorage.setItem('nexora-cart', JSON.stringify(cart)) }, [cart])
+  useEffect(() => { localStorage.setItem('nexora-wishlist', JSON.stringify(wishlist)) }, [wishlist])
+  useEffect(() => { localStorage.setItem('nexora-recent', JSON.stringify(recent)) }, [recent])
   useEffect(() => {
     api.products()
       .then(data => {
@@ -96,7 +96,7 @@ function App() {
   return <div className="app">
     <header className="header">
       <button className="icon mobile" onClick={() => setMenu(!menu)} aria-label="Menu">{menu ? <X/> : <Menu/>}</button>
-      <a className="logo" href="/">DEYOUNGTECH</a>
+      <a className="logo" href="/">NEXORA</a>
       <nav className={menu ? 'nav open' : 'nav'}><a href="#shop" onClick={() => setMenu(false)}>Shop</a><a href="#categories" onClick={() => setMenu(false)}>Categories</a><a href="#about" onClick={() => setMenu(false)}>About</a><a href="#contact" onClick={() => setMenu(false)}>Contact</a>{user?.role === 'admin' ? <a href="/admin">Admin</a> : <a href="/login">Account</a>}</nav>
       <div className="header-actions">
         <label className="search"><Search size={18}/><input value={query} onChange={e => search(e.target.value)} placeholder="Search products..."/></label>
@@ -118,11 +118,11 @@ function App() {
       </section>
 
       {recent.length > 0 && <section className="section recently"><div className="section-head"><div><p className="eyebrow">YOUR ACTIVITY</p><h2>Recently viewed</h2></div><button className="clear-recent" onClick={() => setRecent([])}><RotateCcw size={14}/> Clear</button></div><div className="recent-grid">{recent.map(id => products.find(p => String(p.id || p._id) === id)).filter(Boolean).map(p => <button className="recent-card" key={p.id || p._id} onClick={() => showProduct(p)}><img src={p.image || p.images?.[0]} alt={p.name}/><div><strong>{p.name}</strong><span>{money.format(p.price)}</span></div></button>)}</div></section>}
-      <section className="statement" id="about"><p className="eyebrow">DEYOUNGTECH STORE</p><h2>Simple products.<br/>Better shopping.</h2><p>Browse, save favorites, manage your cart and complete secure online payments from one responsive storefront.</p></section>
+      <section className="statement" id="about"><p className="eyebrow">NEXORA STORE</p><h2>Simple products.<br/>Better shopping.</h2><p>Browse, save favorites, manage your cart and complete secure online payments from one responsive storefront.</p></section>
     </main>
-    <footer id="contact"><div><strong>DEYOUNGTECH</strong><p>A modern e-commerce experience.</p></div><div><p>Secure checkout · Customer accounts · Order management</p><p>© 2026 DEYOUNGTECH. All rights reserved.</p></div></footer>
+    <footer id="contact"><div><strong>NEXORA</strong><p>A modern e-commerce experience.</p></div><div><p>Secure checkout · Customer accounts · Order management</p><p>© 2026 NEXORA. All rights reserved.</p></div></footer>
 
-    {selected && <div className="modal-backdrop" onClick={() => setSelected(null)}><div className="product-modal" onClick={e => e.stopPropagation()}><button className="close" onClick={() => setSelected(null)}><X/></button><img src={selected.image || selected.images?.[0]} alt={selected.name}/><div className="modal-copy"><p className="eyebrow">{selected.category}</p><div className="modal-title"><h2>{selected.name}</h2><button className="icon" onClick={() => toggleWish(selected)}><Heart fill={wishlist.includes(String(selected.id || selected._id)) ? 'currentColor' : 'none'}/></button></div><strong>{money.format(selected.price)}</strong><div className="rating"><Star size={15} fill="currentColor"/> 4.8 <span>· Product details</span></div><p>{selected.description || 'Quality product carefully selected for the DEYOUNGTECH Store.'}</p><p className="stock-line">{selected.stock > 0 ? `${selected.stock} available` : 'Currently out of stock'}</p><button className="button dark" disabled={selected.stock === 0} onClick={() => { add(selected); setSelected(null) }}>{selected.stock === 0 ? 'Out of stock' : 'Add to cart'}</button></div></div></div>}
+    {selected && <div className="modal-backdrop" onClick={() => setSelected(null)}><div className="product-modal" onClick={e => e.stopPropagation()}><button className="close" onClick={() => setSelected(null)}><X/></button><img src={selected.image || selected.images?.[0]} alt={selected.name}/><div className="modal-copy"><p className="eyebrow">{selected.category}</p><div className="modal-title"><h2>{selected.name}</h2><button className="icon" onClick={() => toggleWish(selected)}><Heart fill={wishlist.includes(String(selected.id || selected._id)) ? 'currentColor' : 'none'}/></button></div><strong>{money.format(selected.price)}</strong><div className="rating"><Star size={15} fill="currentColor"/> 4.8 <span>· Product details</span></div><p>{selected.description || 'Quality product carefully selected for the NEXORA Store.'}</p><p className="stock-line">{selected.stock > 0 ? `${selected.stock} available` : 'Currently out of stock'}</p><button className="button dark" disabled={selected.stock === 0} onClick={() => { add(selected); setSelected(null) }}>{selected.stock === 0 ? 'Out of stock' : 'Add to cart'}</button></div></div></div>}
 
     {wishlistOpen && <div className="cart-backdrop" onClick={() => setWishlistOpen(false)}><aside className="cart-drawer" onClick={e => e.stopPropagation()}><div className="cart-head"><h2>Wishlist <small>{wishlist.length}</small></h2><button className="icon" onClick={() => setWishlistOpen(false)}><X/></button></div>{!wishProducts.length ? <div className="empty-cart"><Heart size={34}/><p>Save products you want to revisit.</p><button className="button dark" onClick={() => setWishlistOpen(false)}>Continue shopping</button></div> : <div className="wish-list">{wishProducts.map(p => <div className="wish-item" key={p.id || p._id}><img src={p.image || p.images?.[0]} alt={p.name}/><div><h3>{p.name}</h3><strong>{money.format(p.price)}</strong><div><button className="small-action" onClick={() => add(p)}>Add to cart</button><button className="text-button" onClick={() => toggleWish(p)}>Remove</button></div></div></div>)}</div>}</aside></div>}
 
