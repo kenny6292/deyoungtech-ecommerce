@@ -1,6 +1,6 @@
-# DEYOUNGTECH E-Commerce
+# NEXORA E-Commerce
 
-A production-oriented full-stack e-commerce platform built with React, Node.js, Express, and MongoDB.
+A production-oriented full-stack e-commerce platform branded as NEXORA built with React, Node.js, Express, and MongoDB.
 
 ## Stack
 
