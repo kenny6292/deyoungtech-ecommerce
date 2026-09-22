@@ -20,7 +20,7 @@ export async function verifyPaystack(reference) {
 
 export async function initializeFlutterwave(order, redirectUrl) {
   if (!process.env.FLW_SECRET_KEY) throw new Error('Flutterwave is not configured.')
-  const response = await fetch('https://api.flutterwave.com/v3/payments', { method: 'POST', headers: providerHeaders(process.env.FLW_SECRET_KEY), body: JSON.stringify({ tx_ref: order.reference, amount: order.total, currency: 'NGN', redirect_url: redirectUrl, customer: { email: order.customer.email, name: order.customer.name, phonenumber: order.customer.phone }, customizations: { title: 'DEYOUNGTECH Store', description: `Order ${order.reference}` } }) })
+  const response = await fetch('https://api.flutterwave.com/v3/payments', { method: 'POST', headers: providerHeaders(process.env.FLW_SECRET_KEY), body: JSON.stringify({ tx_ref: order.reference, amount: order.total, currency: 'NGN', redirect_url: redirectUrl, customer: { email: order.customer.email, name: order.customer.name, phonenumber: order.customer.phone }, customizations: { title: 'NEXORA Store', description: `Order ${order.reference}` } }) })
   const data = await response.json()
   if (!response.ok || data.status !== 'success') throw new Error(data.message || 'Flutterwave initialization failed.')
   return data.data
