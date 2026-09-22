@@ -5,7 +5,7 @@ import api from '../services/api'
 const money = new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', maximumFractionDigits: 0 })
 
 export default function Checkout({ cart, onBack, onComplete }) {
-  const savedUser = JSON.parse(localStorage.getItem('deyoungtech-user') || 'null')
+  const savedUser = JSON.parse(localStorage.getItem('nexora-user') || 'null')
   const [form, setForm] = useState({ name: savedUser?.name || '', email: savedUser?.email || '', phone: savedUser?.phone || '', address: '', city: '', state: '' })
   const [paymentMethod, setPaymentMethod] = useState('paystack')
   const [couponCode, setCouponCode] = useState('')
